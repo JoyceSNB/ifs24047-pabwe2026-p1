@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "ifs24047-pabwe2026-proyek-frontend",
+      "name": "ifs24047-pabwe2026-p1",
       "dependencies": {
         "lucide-svelte": "^1.0.1",
         "sweetalert2": "^11.26.25",
