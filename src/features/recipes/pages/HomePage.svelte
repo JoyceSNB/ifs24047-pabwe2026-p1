@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { Search } from "lucide-svelte";
-  import { recipes, categories, loading, fetchRecipes, fetchCategories } from "../states/recipesStore";
+  import { recipes, categories, loading, listError, fetchRecipes, fetchCategories } from "../states/recipesStore";
   import RecipeCard from "../components/RecipeCard.svelte";
 
   let search = $state("");
@@ -16,6 +16,8 @@
     const t = setTimeout(() => fetchRecipes(s, c), 250);
     return () => clearTimeout(t);
   });
+
+  const retry = () => fetchRecipes(search, category);
 
   const chip = (active: boolean) =>
     `rounded-full border px-3 py-1 text-sm ${active ? "border-chili bg-chili text-white" : "border-line bg-paper hover:border-chili"}`;
@@ -39,6 +41,11 @@
 <div class="mt-6">
   {#if $loading}
     <p class="text-muted">Memuat...</p>
+  {:else if $listError}
+    <div role="alert" class="rounded-lg border border-chili p-4">
+      <p class="font-medium text-chili">{$listError}</p>
+      <button onclick={retry} class="mt-3 rounded-lg bg-chili px-4 py-2 text-sm font-medium text-white">Coba lagi</button>
+    </div>
   {:else if $recipes.length === 0}
     <p class="text-muted">Tidak ada resep yang cocok.</p>
   {:else}

@@ -36,9 +36,19 @@ describe("HomePage", () => {
     await waitFor(() => expect(m.getRecipesApi).toHaveBeenLastCalledWith("ars", ""));
   });
   it("tampilan kosong", async () => {
-    m.getRecipesApi.mockResolvedValue(res(null, false));
+    m.getRecipesApi.mockResolvedValue(res({ recipes: [] }));
     render(HomePage);
     expect(await screen.findByText("Tidak ada resep yang cocok.")).toBeInTheDocument();
+  });
+  it("gagal memuat: tampil pesan galat, lalu coba lagi berhasil", async () => {
+    m.getRecipesApi.mockResolvedValueOnce(res(null, false, "Gagal terhubung ke server"));
+    m.getRecipesApi.mockResolvedValueOnce(res({ recipes: [sampleRecipe()] }));
+    render(HomePage);
+    expect(await screen.findByRole("alert")).toHaveTextContent("Gagal terhubung ke server");
+    expect(screen.queryByText("Tidak ada resep yang cocok.")).toBeNull();
+    await userEvent.click(screen.getByRole("button", { name: "Coba lagi" }));
+    expect(await screen.findByText("Arsik Ikan Mas")).toBeInTheDocument();
+    expect(screen.queryByRole("alert")).toBeNull();
   });
   it("tampilan memuat", async () => {
     m.getRecipesApi.mockReturnValue(new Promise(() => {}));
