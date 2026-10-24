@@ -9,14 +9,12 @@ let initPromise: Promise<void> | null = null;
 
 /** Memulihkan sesi dari token tersimpan. Aman dipanggil berkali-kali (hanya berjalan sekali). */
 export function initAuth(): Promise<void> {
-  if (initPromise === null) {
-    initPromise = (async () => {
-      if (!getToken()) return;
-      const r = await meApi();
-      if (r.ok) user.set(r.data.user);
-      else clearToken();
-    })();
-  }
+  initPromise ??= (async () => {
+    if (!getToken()) return;
+    const r = await meApi();
+    if (r.ok) user.set(r.data.user);
+    else clearToken();
+  })();
   return initPromise;
 }
 
