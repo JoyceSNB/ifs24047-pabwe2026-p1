@@ -9,7 +9,7 @@ let initPromise: Promise<void> | null = null;
 
 /** Memulihkan sesi dari token tersimpan. Aman dipanggil berkali-kali (hanya berjalan sekali). */
 export function initAuth(): Promise<void> {
-  if (!initPromise) {
+  if (initPromise === null) {
     initPromise = (async () => {
       if (!getToken()) return;
       const r = await meApi();

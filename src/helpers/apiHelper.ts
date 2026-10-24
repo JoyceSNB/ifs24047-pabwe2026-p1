@@ -23,12 +23,11 @@ export async function apiFetch(path: string, { method = "GET", body }: FetchOpti
   const isForm = body instanceof FormData;
   if (body && !isForm) headers["Content-Type"] = "application/json";
 
+  let payload: FormData | string | undefined;
+  if (body) payload = isForm ? body : JSON.stringify(body);
+
   try {
-    const res = await fetch(`${API_URL}/api${path}`, {
-      method,
-      headers,
-      body: !body ? undefined : isForm ? body : JSON.stringify(body),
-    });
+    const res = await fetch(`${API_URL}/api${path}`, { method, headers, body: payload });
     // 401 saat membawa token = token kedaluwarsa/tidak valid -> sesi diakhiri.
     if (res.status === 401 && token) {
       clearToken();

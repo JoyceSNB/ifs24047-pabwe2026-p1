@@ -7,7 +7,8 @@ export const getRecipesApi = (search = "", category: number | string = "") => {
   if (search) params.set("search", search);
   if (category) params.set("category", String(category));
   const qs = params.toString();
-  return apiFetch(`/recipes${qs ? `?${qs}` : ""}`);
+  const suffix = qs ? `?${qs}` : "";
+  return apiFetch(`/recipes${suffix}`);
 };
 
 export const getRecipeApi = (id: number | string) => apiFetch(`/recipes/${id}`);
