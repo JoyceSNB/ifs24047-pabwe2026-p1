@@ -8,7 +8,9 @@ import process from "process";
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
   const port = Number(process.env.APP_PORT || env.APP_PORT) || 3000;
-  const apiBase = (process.env.VITE_API_BASEURL || env.VITE_API_BASEURL || "http://localhost:8000").replace(/\/$/, "");
+  // Build produksi (server Delcom) memakai backend yang sudah di-deploy; dev/test memakai localhost.
+  const defaultApi = mode === "production" ? "https://ifs24047-pabwe2026-proyek1-backend.s1if.cloud" : "http://localhost:8000";
+  const apiBase = (process.env.VITE_API_BASEURL || env.VITE_API_BASEURL || defaultApi).replace(/\/$/, "");
 
   return {
     plugins: [
