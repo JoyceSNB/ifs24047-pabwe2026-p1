@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "bun ./build",
+    "start": "bun ./start.js",
     "dev": "vite dev",
     "build": "bun --bun vite build",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
